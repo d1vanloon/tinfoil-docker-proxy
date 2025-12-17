@@ -23,7 +23,7 @@ function logIncomingRequest(req) {
 }
 
 /**
- * Prepares of headers for the upstream request.
+ * Prepares headers for the upstream request.
  * @param {import('http').IncomingMessage} req
  * @returns {Record<string, string>}
  */
