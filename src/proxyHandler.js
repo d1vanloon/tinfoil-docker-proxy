@@ -35,8 +35,10 @@ function prepareRequestHeaders(req) {
     delete headers['content-length'];
     delete headers['connection'];
 
-    // Enforce the Tinfoil API Key
-    headers['authorization'] = 'Bearer ' + config.apiKey;
+    // Use the API key from the request if provided, otherwise use the configured API key
+    if (!headers['authorization']) {
+        headers['authorization'] = 'Bearer ' + config.apiKey;
+    }
 
     // Default content-type if missing
     if (!headers['content-type']) {
