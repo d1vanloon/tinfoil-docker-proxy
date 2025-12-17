@@ -9,7 +9,7 @@
     },
     "dependencies": {
         "express": "^5.2.1",
-        "tinfoil": "latest",
+        "tinfoil": "^0.10.11",
         "dotenv": "^17.2.3"
     }
 }
