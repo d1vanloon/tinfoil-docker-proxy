@@ -77,7 +77,7 @@ PORT=3000
 
 Once the proxy is running, point your OpenAI client or standard HTTP requests to `http://localhost:3000`.
 
-**Example: PowerShell Request**
+**Example: PowerShell Request (using configured API key)**
 
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:3000/v1/chat/completions" `
@@ -91,12 +91,28 @@ Invoke-RestMethod -Uri "http://localhost:3000/v1/chat/completions" `
   }' | ConvertTo-Json -Depth 10
 ```
 
+**Example: PowerShell Request with custom API key**
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/v1/chat/completions" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Headers @{ Authorization = "Bearer your_custom_api_key" } `
+  -Body '{
+    "model": "gpt-oss-120b",
+    "messages": [
+      { "role": "user", "content": "Hello, Tinfoil!" }
+    ]
+  }' | ConvertTo-Json -Depth 10
+```
+
 ## How It Works
 
 1. **Initialization**: On startup, the `SecureClient` authenticates with the Tinfoil platform and verifies the execution environment using remote attestation.
 2. **Request Handling**: Incoming requests (e.g., from an LLM client) are intercepted.
-3. **Security**: The proxy injects your `TINFOIL_API_KEY` and forwards the request over an encrypted channel established by the `SecureClient`.
-4. **Streaming**: Responses from Tinfoil are streamed back to the client in real-time, preserving standard OpenAI chunk formats.
+3. **API Key Management**: The proxy uses the API key provided in the request's `Authorization` header if present. If no API key is provided by the client, it falls back to the configured `TINFOIL_API_KEY` environment variable. This allows clients to use their own API keys while maintaining backward compatibility.
+4. **Security**: Requests are forwarded over an encrypted channel established by the `SecureClient`.
+5. **Streaming**: Responses from Tinfoil are streamed back to the client in real-time, preserving standard OpenAI chunk formats.
 
 ## About Tinfoil AI
 
