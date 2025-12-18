@@ -39,7 +39,40 @@ PORT=3000
 
 ## Usage
 
-### Running with Docker
+### Running from GitHub Container Registry (Recommended)
+
+Pre-built Docker images are automatically published to GitHub Container Registry. You can pull and run them directly without building locally.
+
+1. **Pull the latest image:**
+
+   ```bash
+   docker pull ghcr.io/d1vanloon/tinfoil-docker-proxy:latest
+   ```
+
+2. **Run the container:**
+
+   ```bash
+   docker run -d \
+     -e TINFOIL_API_KEY=your_api_key \
+     -p 3000:3000 \
+     --name tinfoil-proxy \
+     ghcr.io/d1vanloon/tinfoil-docker-proxy:latest
+   ```
+
+   **Using a specific version:**
+
+   ```bash
+   docker pull ghcr.io/d1vanloon/tinfoil-docker-proxy:v1.0.0
+   docker run -d \
+     -e TINFOIL_API_KEY=your_api_key \
+     -p 3000:3000 \
+     --name tinfoil-proxy \
+     ghcr.io/d1vanloon/tinfoil-docker-proxy:v1.0.0
+   ```
+
+### Building and Running with Docker Locally
+
+If you prefer to build the image yourself:
 
 1. **Build the image:**
 
