@@ -5,7 +5,7 @@ dotenv.config();
 const apiKey = process.env.TINFOIL_API_KEY;
 const port = process.env.PORT || 3000;
 
-if (!apiKey) {
+if (!apiKey && process.env.NODE_ENV !== 'test') {
     console.error('Error: TINFOIL_API_KEY environment variable is not set.');
     process.exit(1);
 }
