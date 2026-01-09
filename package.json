@@ -10,6 +10,6 @@
     "dependencies": {
         "dotenv": "^17.2.3",
         "express": "^5.2.1",
-        "tinfoil": "^0.11.8"
+        "tinfoil": "^0.11.13"
     }
 }
