@@ -1,6 +1,6 @@
 import { SecureClient } from 'tinfoil/secure-client';
 
-export const secureClient = new SecureClient();
+export let secureClient = new SecureClient();
 
 export async function initializeTinfoil() {
     console.log('Initializing SecureClient...');
@@ -9,11 +9,17 @@ export async function initializeTinfoil() {
     console.log('Verifying execution environment...');
     const verificationDoc = await secureClient.getVerificationDocument();
 
-    if (!verificationDoc) {
-        throw new Error('Verification failed: No verification document received.');
+    if (!verificationDoc || verificationDoc.securityVerified === false) {
+        throw new Error('Verification failed: No verification document received or security verification failed.');
     }
 
     console.log('Environment verified successfully.');
     console.log('Verification Document:', JSON.stringify(verificationDoc, null, 2));
     return secureClient;
+}
+
+export async function resetTinfoil() {
+    console.log('Resetting SecureClient...');
+    secureClient = new SecureClient();
+    await initializeTinfoil();
 }
