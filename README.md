@@ -6,7 +6,8 @@ A secure, Node.js-based Docker proxy that forwards OpenAI-compatible requests to
 
 - **OpenAI Compatibility**: Drop-in replacement for OpenAI API clients (proxies `/v1/models`, `/v1/chat/completions`, etc.).
 - **Privacy & Security**: Uses the Tinfoil OS `SecureClient` to perform remote attestation and end-to-end encryption.
-- **Streaming Support**: Fully supports streaming responses for chat completions.
+- **Automatic Recovery**: Automatically handles HPKE key mismatches by resetting the secure client and retrying.
+- **Streaming Support**: Fully supports streaming responses for chat completions (Node.js & Web Streams).
 - **Dockerized**: specific `Dockerfile` included for easy deployment.
 - **Header Management**: Automatically handles Tinfoil API authentication and cleans up hop-by-hop headers.
 
@@ -106,6 +107,14 @@ If you prefer to build the image yourself:
 
    The server will verify the Tinfoil environment and start listening on port 3000.
 
+### Testing
+
+Run the test suite to verify functionality:
+
+```bash
+npm test
+```
+
 ## API Usage
 
 Once the proxy is running, point your OpenAI client or standard HTTP requests to `http://localhost:3000`.
@@ -141,7 +150,7 @@ Invoke-RestMethod -Uri "http://localhost:3000/v1/chat/completions" `
 
 ## How It Works
 
-1. **Initialization**: On startup, the `SecureClient` authenticates with the Tinfoil platform and verifies the execution environment using remote attestation.
+1. **Initialization**: On startup, the `SecureClient` authenticates with the Tinfoil platform and verifies the execution environment (TEE) using remote attestation. If verification fails, the server will not start.
 2. **Request Handling**: Incoming requests (e.g., from an LLM client) are intercepted.
 3. **API Key Management**: The proxy uses the API key provided in the request's `Authorization` header if present. If no API key is provided by the client, it falls back to the configured `TINFOIL_API_KEY` environment variable. This allows clients to use their own API keys while maintaining backward compatibility.
 4. **Security**: Requests are forwarded over an encrypted channel established by the `SecureClient`.
