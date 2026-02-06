@@ -36,7 +36,7 @@ function prepareRequestHeaders(req) {
     delete headers['connection'];
 
     // Use the API key from the request if provided, otherwise use the configured API key
-    if (!headers['authorization']) {
+    if (!headers['authorization'] && config.apiKey) {
         headers['authorization'] = 'Bearer ' + config.apiKey;
     }
 
