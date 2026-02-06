@@ -1,5 +1,5 @@
 import { config } from './config.js';
-import { secureClient, resetTinfoil } from './tinfoilClient.js';
+import { secureClient, resetTinfoil, shouldReset } from './tinfoilClient.js';
 import { URL } from 'url';
 
 /**
@@ -116,6 +116,11 @@ export async function proxyHandler(req, res) {
         };
 
         console.log(`[Proxy] Outgoing Request URL: ${url}`);
+
+        if (shouldReset(config.resetInterval * 1000)) {
+            console.log('[Proxy] Scheduled reset interval exceeded. Resetting Tinfoil client...');
+            await resetTinfoil();
+        }
 
         let response;
         try {

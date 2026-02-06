@@ -14,7 +14,8 @@ jest.unstable_mockModule('../src/tinfoilClient.js', () => ({
         getBaseURL: mockGetBaseURL,
         fetch: mockFetch
     },
-    resetTinfoil: mockResetTinfoil
+    resetTinfoil: mockResetTinfoil,
+    shouldReset: jest.fn().mockReturnValue(false)
 }));
 
 jest.unstable_mockModule('../src/config.js', () => ({
@@ -169,6 +170,28 @@ describe('proxyHandler', () => {
         expect(mockFetch).toHaveBeenCalledTimes(2);
         expect(res.status).toBe(200);
         expect(res.body).toEqual({ success: true });
+    });
+
+    test('should reset client when interval exceeded', async () => {
+        // Arrange
+        mockGetBaseURL.mockReturnValue('https://api.tinfoil.ai/v1');
+        mockFetch.mockResolvedValue({
+            status: 200,
+            statusText: 'OK',
+            headers: new Map(),
+            arrayBuffer: async () => Buffer.from('{}')
+        });
+
+        // Import the mock to change its implementation for this test
+        const { shouldReset } = await import('../src/tinfoilClient.js');
+        shouldReset.mockReturnValueOnce(true);
+
+        // Act
+        await request(app).get('/test-reset');
+
+        // Assert
+        expect(mockResetTinfoil).toHaveBeenCalled();
+        expect(mockFetch).toHaveBeenCalled();
     });
 
     test('should not include body for GET requests', async () => {
