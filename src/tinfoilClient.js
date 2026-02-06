@@ -1,4 +1,4 @@
-import { SecureClient } from 'tinfoil/secure-client';
+import { SecureClient } from 'tinfoil';
 
 export let secureClient = new SecureClient();
 

@@ -6,7 +6,7 @@ const mockGetVerificationDocument = jest.fn();
 const mockGetBaseURL = jest.fn();
 const mockFetch = jest.fn();
 
-jest.unstable_mockModule('tinfoil/secure-client', () => ({
+jest.unstable_mockModule('tinfoil', () => ({
     SecureClient: jest.fn().mockImplementation(() => ({
         ready: mockReady,
         getVerificationDocument: mockGetVerificationDocument,
@@ -17,7 +17,7 @@ jest.unstable_mockModule('tinfoil/secure-client', () => ({
 
 // Import the module under test AFTER mocking
 const { initializeTinfoil, secureClient, resetTinfoil } = await import('../src/tinfoilClient.js');
-const { SecureClient } = await import('tinfoil/secure-client');
+const { SecureClient } = await import('tinfoil');
 
 describe('TinfoilClient', () => {
     beforeEach(() => {
