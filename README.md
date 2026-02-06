@@ -36,6 +36,10 @@ TINFOIL_API_KEY=your_tinfoil_api_key_here
 
 # Optional: Server Port (default: 3000)
 PORT=3000
+
+# Optional: Reset Client Interval in Seconds (default: 3600 = 1 hour)
+# Defines how often the secure client should be reset to ensure freshness.
+TINFOIL_RESET_INTERVAL=3600
 ```
 
 ## Usage
