@@ -7,11 +7,6 @@ const port = process.env.PORT || 3000;
 
 const resetInterval = parseInt(process.env.TINFOIL_RESET_INTERVAL || '3600', 10);
 
-if (!apiKey && process.env.NODE_ENV !== 'test') {
-    console.error('Error: TINFOIL_API_KEY environment variable is not set.');
-    process.exit(1);
-}
-
 export const config = {
     apiKey,
     port,

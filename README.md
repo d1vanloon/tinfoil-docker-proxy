@@ -14,7 +14,7 @@ A secure, Node.js-based Docker proxy that forwards OpenAI-compatible requests to
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) installed.
-- A **Tinfoil API Key**. You can obtain one from the [Tinfoil Dashboard](https://tinfoil.sh).
+- **Tinfoil API Key**. You can obtain one from the [Tinfoil Dashboard](https://tinfoil.sh). (Optional if provided in requests)
 - (Optional) Node.js v18+ for local development.
 
 ## Installation
@@ -31,7 +31,8 @@ cd tinfoil-docker-proxy
 Create a `.env` file in the root directory (or use environment variables in Docker):
 
 ```ini
-# Required: Your Tinfoil API Key
+# Optional: Your Tinfoil API Key
+# If not provided here, it must be provided in the Authorization header of each request.
 TINFOIL_API_KEY=your_tinfoil_api_key_here
 
 # Optional: Server Port (default: 3000)
