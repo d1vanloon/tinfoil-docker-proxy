@@ -9,7 +9,7 @@
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
     },
     "dependencies": {
-        "dotenv": "^17.2.3",
+        "dotenv": "^17.2.4",
         "express": "^5.2.1",
         "tinfoil": "^1.0.4"
     },
