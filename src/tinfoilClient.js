@@ -1,16 +1,6 @@
 import { SecureClient } from 'tinfoil';
 
-export let secureClient = new SecureClient();
-let lastResetTime = 0;
-
-export function getLastResetTime() {
-    return lastResetTime;
-}
-
-export function shouldReset(intervalInMs) {
-    if (!lastResetTime) return false;
-    return (Date.now() - lastResetTime) > intervalInMs;
-}
+export const secureClient = new SecureClient();
 
 export async function initializeTinfoil() {
     console.log('Initializing SecureClient...');
@@ -26,13 +16,5 @@ export async function initializeTinfoil() {
     console.log('Environment verified successfully.');
     console.log('Verification Document:', JSON.stringify(verificationDoc, null, 2));
 
-    lastResetTime = Date.now();
-
     return secureClient;
-}
-
-export async function resetTinfoil() {
-    console.log('Resetting SecureClient...');
-    secureClient = new SecureClient();
-    await initializeTinfoil();
 }
