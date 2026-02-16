@@ -1,5 +1,5 @@
 import { config } from './config.js';
-import { secureClient, resetTinfoil, shouldReset } from './tinfoilClient.js';
+import { secureClient } from './tinfoilClient.js';
 import { URL } from 'url';
 
 /**
@@ -117,24 +117,7 @@ export async function proxyHandler(req, res) {
 
         console.log(`[Proxy] Outgoing Request URL: ${url}`);
 
-        if (shouldReset(config.resetInterval * 1000)) {
-            console.log('[Proxy] Scheduled reset interval exceeded. Resetting Tinfoil client...');
-            await resetTinfoil();
-        }
-
-        let response;
-        try {
-            response = await secureClient.fetch(url, fetchOptions);
-        } catch (error) {
-            if (error.message && error.message.includes('HPKE')) {
-                console.warn('[Proxy] HPKE issue detected. Resetting Tinfoil client and retrying...');
-                await resetTinfoil();
-                // Retry the request with the new client
-                response = await secureClient.fetch(url, fetchOptions);
-            } else {
-                throw error;
-            }
-        }
+        const response = await secureClient.fetch(url, fetchOptions);
 
         await handleUpstreamResponse(response, res);
 

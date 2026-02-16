@@ -6,7 +6,7 @@ A secure, Node.js-based Docker proxy that forwards OpenAI-compatible requests to
 
 - **OpenAI Compatibility**: Drop-in replacement for OpenAI API clients (proxies `/v1/models`, `/v1/chat/completions`, etc.).
 - **Privacy & Security**: Uses the Tinfoil OS `SecureClient` to perform remote attestation and end-to-end encryption.
-- **Automatic Recovery**: Automatically handles HPKE key mismatches by resetting the secure client and retrying.
+- **Automatic Recovery**: Built-in automatic retry and reset logic handles key mismatches and enclave restarts.
 - **Streaming Support**: Fully supports streaming responses for chat completions (Node.js & Web Streams).
 - **Dockerized**: specific `Dockerfile` included for easy deployment.
 - **Header Management**: Automatically handles Tinfoil API authentication and cleans up hop-by-hop headers.
@@ -37,10 +37,6 @@ TINFOIL_API_KEY=your_tinfoil_api_key_here
 
 # Optional: Server Port (default: 3000)
 PORT=3000
-
-# Optional: Reset Client Interval in Seconds (default: 3600 = 1 hour)
-# Defines how often the secure client should be reset to ensure freshness.
-TINFOIL_RESET_INTERVAL=3600
 ```
 
 ## Usage

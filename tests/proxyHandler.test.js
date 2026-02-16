@@ -3,8 +3,6 @@ import request from 'supertest';
 import express from 'express';
 import { Readable } from 'stream';
 
-const mockResetTinfoil = jest.fn();
-
 // Mock dependencies
 const mockGetBaseURL = jest.fn();
 const mockFetch = jest.fn();
@@ -13,9 +11,7 @@ jest.unstable_mockModule('../src/tinfoilClient.js', () => ({
     secureClient: {
         getBaseURL: mockGetBaseURL,
         fetch: mockFetch
-    },
-    resetTinfoil: mockResetTinfoil,
-    shouldReset: jest.fn().mockReturnValue(false)
+    }
 }));
 
 jest.unstable_mockModule('../src/config.js', () => ({
@@ -144,54 +140,6 @@ describe('proxyHandler', () => {
         // Assert
         expect(res.headers['content-encoding']).toBeUndefined();
         expect(res.headers['x-custom-header']).toBe('value');
-    });
-
-    test('should retry on HPKE public key mismatch', async () => {
-        // Arrange
-        mockGetBaseURL.mockReturnValue('https://api.tinfoil.ai/v1');
-
-        // First call fails with specific error
-        mockFetch.mockRejectedValueOnce(new Error('HPKE public key mismatch'));
-
-        // Second call succeeds
-        mockFetch.mockResolvedValueOnce({
-            status: 200,
-            statusText: 'OK',
-            headers: new Map([['content-type', 'application/json']]),
-            body: Readable.from([JSON.stringify({ success: true })]),
-            arrayBuffer: async () => new TextEncoder().encode(JSON.stringify({ success: true })).buffer
-        });
-
-        // Act
-        const res = await request(app).post('/retry-test');
-
-        // Assert
-        expect(mockResetTinfoil).toHaveBeenCalled();
-        expect(mockFetch).toHaveBeenCalledTimes(2);
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual({ success: true });
-    });
-
-    test('should reset client when interval exceeded', async () => {
-        // Arrange
-        mockGetBaseURL.mockReturnValue('https://api.tinfoil.ai/v1');
-        mockFetch.mockResolvedValue({
-            status: 200,
-            statusText: 'OK',
-            headers: new Map(),
-            arrayBuffer: async () => Buffer.from('{}')
-        });
-
-        // Import the mock to change its implementation for this test
-        const { shouldReset } = await import('../src/tinfoilClient.js');
-        shouldReset.mockReturnValueOnce(true);
-
-        // Act
-        await request(app).get('/test-reset');
-
-        // Assert
-        expect(mockResetTinfoil).toHaveBeenCalled();
-        expect(mockFetch).toHaveBeenCalled();
     });
 
     test('should not include body for GET requests', async () => {
