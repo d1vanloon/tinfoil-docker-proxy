@@ -16,7 +16,7 @@ jest.unstable_mockModule('tinfoil', () => ({
 }));
 
 // Import the module under test AFTER mocking
-const { initializeTinfoil, secureClient, resetTinfoil } = await import('../src/tinfoilClient.js');
+const { initializeTinfoil, secureClient } = await import('../src/tinfoilClient.js');
 const { SecureClient } = await import('tinfoil');
 
 describe('TinfoilClient', () => {
@@ -54,24 +54,5 @@ describe('TinfoilClient', () => {
 
         // Act & Assert
         await expect(initializeTinfoil()).rejects.toThrow('Verification failed: No verification document received or security verification failed.');
-    });
-
-    test('resetTinfoil should create new SecureClient and re-initialize', async () => {
-        // Arrange
-        mockReady.mockResolvedValue(undefined);
-        mockGetVerificationDocument.mockResolvedValue({ some: 'doc' });
-
-        // Clear previous calls from initial import/setup if any
-        SecureClient.mockClear();
-        mockReady.mockClear();
-        mockGetVerificationDocument.mockClear();
-
-        // Act
-        await resetTinfoil();
-
-        // Assert
-        expect(SecureClient).toHaveBeenCalled();
-        expect(mockReady).toHaveBeenCalled();
-        expect(mockGetVerificationDocument).toHaveBeenCalled();
     });
 });
