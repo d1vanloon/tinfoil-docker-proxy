@@ -1,0 +1,10 @@
+{
+  "name": "tinfoil-docker-proxy",
+  "install": "npm ci",
+  "terminals": [
+    {
+      "name": "proxy",
+      "command": "npm start"
+    }
+  ]
+}
